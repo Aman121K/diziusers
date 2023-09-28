@@ -8,6 +8,8 @@ import { Images } from "../../../Constant/Images";
 import { FONTS } from "../../../Constant/fonts";
 import { Routes } from "../../../Constant/Routes";
 import { Apis, BASE_URL } from "../../../Constant/APisUrl";
+import SaloonContainers from "../../../Components/SaloonContainers";
+import NoDataFound from "../../../Components/NoDataFound";
 const style = StyleSheet.create({
     mainConatiner: {
         flex: 1
@@ -106,47 +108,35 @@ const UserSearch = ({ navigation }) => {
         setSallonListData(data?.data)
     }
     const goToNextPage = (item) => {
-        navigation.navigate(Routes.UserSaloonDetails,{data:item})
+        console.log("Item>>", item)
+        navigation.navigate(Routes.UserSaloonDetails, { data: item?.item })
     }
     const renderData = (item) => {
-        console.log("saloon item>>",item)
+        console.log("saloon item>>", item)
         return (
-            <TouchableOpacity onPress={() => goToNextPage(item)} style={style.dataContainer}>
-                <Image source={Images.SALLON_BG_IMAGE} style={style.dataImage} />
-                <TouchableOpacity style={style.unlikeButon}>
-                    <Image source={Images.UNLIKE} />
-                </TouchableOpacity>
-                <View style={style.textConatiner}>
-                    <View style={style.startContainer}>
-                        <Image source={Images.STAR} />
-                        <Text style={style.reviewtext}>3.5</Text>
-                        <Text>(12)</Text>
-                    </View>
-                    <View>
-                        <Text style={style.genderText}>Male</Text>
-                    </View>
-                </View>
-                <View style={style.sallonContainer}>
-                    <View>
-                        <Text style={style.saloonText}>{item?.item?.salonName}</Text>
-                    </View>
-                    <View>
-                        <Text style={style.genderText}>{(item?.item?.title)}</Text>
-                    </View>
-                </View>
-                <View style={style.locationContainer}>
-                    <Image source={Images.LOCATION} />
-                    <Text style={style.locationText}>10Km. Near Jagatpura Phatak</Text>
-                </View>
-                {/* <Text>{item?.item?.title}</Text> */}
-            </TouchableOpacity>
+            <SaloonContainers item={item} onClick={goToNextPage} />
         )
     }
+    const onChangeText =async (e) => {
+        console.log("onChnage text>>", e)
+        const response = await fetch(`http://43.204.144.93:5001/api/v1/salon/search-salon?query=${e}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Search Data>>", data)
+        setSallonListData(data?.data)
+    }
+    const renderEmptyComponent = () => (
+        <NoDataFound text="No Saloon Found"/>
+      );
     return (
         <SafeAreaView style={style.mainConatiner}>
             <UserCartHeader isBackhide={true} title={TextConstant.SEARCH_FOR_SERVICE} />
             <View style={style.searchConatiner}>
-                <SearchNearSaloon text={TextConstant.SEARCH__HAIR_CUTTING_SALON} />
+                <SearchNearSaloon onChangeText={onChangeText} text={TextConstant.SEARCH__HAIR_CUTTING_SALON} />
             </View>
             <View style={style.dataMainContainer}>
                 <FlatList
@@ -154,6 +144,8 @@ const UserSearch = ({ navigation }) => {
                     renderItem={renderData}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={renderEmptyComponent}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         </SafeAreaView>

@@ -31,14 +31,14 @@ const style = StyleSheet.create({
         lineHeight: scaleHeight(20)
     }
 })
-const SaloonuserDesign = () => {
+const SaloonuserDesign = ({data}) => {
     return (
         <>
             <View style={style.mainConatiner}>
                 <Image source={Images.SaloonUser} />
                 <View style={style.userConatiner}>
-                    <Text style={style.userNameStyle}>James Doe</Text>
-                    <Text style={style.saloonName}>Salon Name</Text>
+                    <Text style={style.userNameStyle}>{data.salonOwnerName}</Text>
+                    <Text style={style.saloonName}>{data.salonName}</Text>
                     <View style={style.starConatiner}>
                         <Image source={Images.STAR} />
                         <Image source={Images.STAR} />

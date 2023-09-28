@@ -7,8 +7,8 @@ import { FONTS } from '../../Constant/fonts';
 const styles = StyleSheet.create({
     mainContainer: {
         flexDirection: 'row',
-        borderWidth: .5,
-        padding: scaleHeight(Platform.OS === 'ios' ? 16 : 2),
+        borderWidth: 1,
+        padding: scaleHeight(Platform.OS === 'ios' ? 10 : 2),
         marginHorizontal: scaleWidth(12),
         borderColor: '#CECECE',
         borderRadius: scaleWidth(5),
@@ -21,12 +21,15 @@ const styles = StyleSheet.create({
         width: "90%"
     }
 })
-const SearchConatiner = ({placeholdertext}) => {
+const SearchConatiner = ({ placeholdertext, onChangeText, value }) => {
     return (
         <View style={styles.mainContainer}>
-            <Image source={Images.SEARCH_ICON} />
-            <TextInput style={styles.inputStyle} placeholder={placeholdertext?placeholdertext:TextConstant.SEARCH_TEXT} />
-            
+            <Image style={{marginLeft:scaleWidth(10)}} source={Images.SEARCH_ICON} />
+            <TextInput
+                style={styles.inputStyle}
+                onChangeText={(e) => onChangeText(e)}
+                value={value}
+                placeholder={placeholdertext ? placeholdertext : TextConstant.SEARCH_TEXT} />
         </View>
     )
 }

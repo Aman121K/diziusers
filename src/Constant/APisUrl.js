@@ -12,7 +12,8 @@ export const Apis = {
     GET_ARTICALS:'get-articles',
     GET_STYLES:'get-styles',
     get_ADS:'get-ads',
-    GET_ALL_SALOONS:'get-all-salons'
+    GET_ALL_SALOONS:'get-all-salons',
+    GET_BARBER_LIST:'barber/getSalonBarbers/'
 
 }
 export const BASE_URL = `http://43.204.144.93:5001/api/v1/`

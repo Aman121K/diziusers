@@ -8,19 +8,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 15,
-        marginTop: scaleHeight(10)
+        marginTop: scaleHeight(10),
+        // backgroundColor:'white'
     },
     ImageStyle: {
     },
     backButtonStyle: {
     }
 })
-const AuthHeader = ({ backbutton,navigation }) => {
+const AuthHeader = ({ backbutton, navigation }) => {
     return (
         <View style={styles.mainConatiner}>
-            <View>
+            <TouchableOpacity>
                 {backbutton && <TouchableOpacity onPress={() => navigation.goBack()}><Image style={styles.backButtonStyle} source={Images.BackBuuton} /></TouchableOpacity>}
-            </View>
+            </TouchableOpacity>
             <View>
                 <Image style={styles.ImageStyle} source={Images.LOGO_Image} />
             </View>

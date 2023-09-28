@@ -8,6 +8,7 @@ import { FONTS } from '../../../Constant/fonts';
 import TrendingLists from '../../../Components/TredningList';
 import { Routes } from '../../../Constant/Routes';
 import { Apis, BASE_URL } from '../../../Constant/APisUrl';
+import NoDataFound from '../../../Components/NoDataFound';
 const styles = StyleSheet.create({
     mainConatiner: {
     },
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
         fontSize: normalize(25),
         fontFamily: FONTS.MontserratMedium,
         lineHeight: scaleHeight(31),
-        color:'black'
+        color: 'black'
     },
     serachConatiner: {
         marginVertical: scaleHeight(30)
@@ -43,24 +44,44 @@ const ArticalList = ({ navigation }) => {
     }
     const onClick = (data) => {
         console.log("click style", data)
-        navigation.navigate(Routes.TrendingDetails, { data: data })
+        navigation.navigate(Routes.TrendingDetails, { data: data?.item })
     }
     const renderItems = (item) => {
         return (
             <TrendingLists data={item} onClick={onClick} />
         )
     }
+    const renderEmptyComponent = () => (
+        <NoDataFound text="No Artical's Found" />
+    );
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const filteredData = articalData.filter(item =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const onChangeText = (e) => {
+        console.log(e);
+        setSearchQuery(e)
+
+    }
     return (
         <SafeAreaView>
             <AuthHeader navigation={navigation} backbutton={true} />
             <View style={styles.trendingConatiner}>
                 <View style={styles.serachConatiner}>
-                    <SearchConatiner />
+                    <SearchConatiner 
+                    placeholdertext="Search for Artical's" 
+                    value={searchQuery} 
+                    onChangeText={onChangeText}
+                     />
                 </View>
                 <Text style={styles.trendingText}>Trending Artical's</Text>
                 <FlatList
-                    data={articalData}
+                    data={searchQuery ? filteredData : articalData}
+                    // data={articalData}
                     renderItem={renderItems}
+                    ListEmptyComponent={renderEmptyComponent}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         </SafeAreaView>

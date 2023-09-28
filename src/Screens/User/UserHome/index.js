@@ -14,6 +14,10 @@ import Geolocation from '@react-native-community/geolocation';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { getLocationName } from "../../../Utils";
 import { Routes } from "../../../Constant/Routes";
+import SaloonContainers from "../../../Components/SaloonContainers";
+import UserFavouriteSaloon from "../UserFavouriteSaloon";
+import { Apis, BASE_URL } from "../../../Constant/APisUrl";
+import { getStyle } from "react-native-svg/lib/typescript/xml";
 const { width } = Dimensions.get('window');
 const itemWidth = 50;
 const style = StyleSheet.create({
@@ -32,7 +36,7 @@ const style = StyleSheet.create({
     categoryText: {
         fontSize: normalize(16),
         fontFamily: FONTS.MontserratSemiBold,
-        color:'black'
+        color: 'black'
     },
     knowmoreText: {
         fontFamily: FONTS.MontserratRegular,
@@ -47,7 +51,8 @@ const style = StyleSheet.create({
         fontSize: normalize(12),
         fontWeight: '500',
         lineHeight: scaleHeight(15),
-        color: "black"
+        color: "black",
+        margin:scaleHeight(2)
     },
     searchConatiner: {
         marginTop: scaleHeight(20)
@@ -83,34 +88,21 @@ const style = StyleSheet.create({
         marginTop: scaleHeight(24)
     },
     articalDesign: {
-        borderWidth: 1,
-        borderColor: 'white',
+        // borderWidth: 1,
+        // borderColor: 'white',
         padding: scaleHeight(5),
         alignItems: 'center',
         margin: scaleHeight(10),
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         borderRadius: scaleHeight(5)
         // alignSelf: 'center'
     }
 })
 const UserHome = ({ navigation }) => {
-    const [crausalData, setCrasualData] = React.useState([
-        {
-            title: 'First'
-        },
-        {
-            title: 'second'
-        },
-        {
-            title: 'third'
-        },
-        {
-            title: 'third'
-        },
-        {
-            title: 'third'
-        }
-    ])
+    const [saloonsData, setSaloonDatas] = React.useState([])
+    const [Ads, setAds] = React.useState([])
+    const [stylesData, setStylesData] = React.useState([]);
+    const [ArticalsData, setArticalsData] = React.useState([])
     const refRBSheet = React.useRef();
     const [location, setLocation] = React.useState(null);
     const [currentPlaceName, setCurrentPlaceName] = React.useState();
@@ -127,6 +119,11 @@ const UserHome = ({ navigation }) => {
         setLocationStatus
     ] = useState('');
     useEffect(() => {
+        // getCatogoriesApi()
+        getSaloonAPis();
+        getsAdsApi();
+        getArticals();
+        getStyles();
         const requestLocationPermission = async () => {
             if (Platform.OS === 'ios') {
                 getOneTimeLocation();
@@ -156,8 +153,53 @@ const UserHome = ({ navigation }) => {
         return () => {
             Geolocation.clearWatch(watchID);
         };
-    }, []);
 
+    }, []);
+    const getSaloonAPis = async () => {
+        const response = await fetch(BASE_URL + Apis.GET_ALL_SALOONS, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Saloon details>", data)
+        setSaloonDatas(data?.data)
+        // setSallonListData(data?.data)
+    }
+    const getsAdsApi = async () => {
+        const response = await fetch(BASE_URL + Apis.get_ADS, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Ads details>", data)
+        setAds(data?.data)
+    }
+    const getArticals = async () => {
+        const response = await fetch(BASE_URL + Apis.GET_ARTICALS, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Articals details>", data)
+        setArticalsData(data?.data)
+    }
+    const getStyles = async () => {
+        const response = await fetch(BASE_URL + Apis.GET_STYLES, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Styles details>", data)
+        setStylesData(data?.data)
+    }
     const getOneTimeLocation = () => {
         setLocationStatus('Getting Location ...');
         Geolocation.getCurrentPosition(
@@ -239,6 +281,7 @@ const UserHome = ({ navigation }) => {
         );
     };
     const openCategory = () => {
+        navigation.navigate('UserCategorriesList')
     }
     const [categoryList, setCategoryList] = React.useState([
         {
@@ -261,7 +304,7 @@ const UserHome = ({ navigation }) => {
 
     ])
     const particularStyle = (data) => {
-        navigation.navigate(Routes.TrendingDetails, { data: data })
+        navigation.navigate(Routes.TrendingDetails, { data: data?.item })
     }
     const renderItem = (item, index) => {
         return (
@@ -269,6 +312,19 @@ const UserHome = ({ navigation }) => {
                 <Image source={Images.HAIRCUTTINGS} />
                 <Text style={style.title}>{item?.item?.title}</Text>
             </TouchableOpacity>
+        )
+    }
+    const gotoSaloonDetailsPage = (item) => {
+        navigation.navigate(Routes.UserSaloonDetails, { data: item?.item })
+    }
+    const renderSaloonItem = (item, index) => {
+        return (
+            <SaloonContainers onClick={gotoSaloonDetailsPage} item={item} />
+        )
+    }
+    const usersRecomendedSaloon = (item, index) => {
+        return (
+            <SaloonContainers onClick={gotoSaloonDetailsPage} item={item} />
         )
     }
     const renderItemCategory = (item, index) => {
@@ -280,15 +336,22 @@ const UserHome = ({ navigation }) => {
         )
     }
     const particularArtical = (data) => {
-        navigation.navigate(Routes.AtricalDetails, { data: data })
+        navigation.navigate(Routes.AtricalDetails, { data: data?.item })
     }
     const renderArtical = (item, index) => {
         return (
             <TouchableOpacity style={style.articalDesign} onPress={() => particularArtical(item)}>
-                {/* <View key={index} style={style.itemConatiner}> */}
                 <Image source={Images.CHOTI_DESIGN} />
                 <Text style={style.title}>{item?.item?.title}</Text>
-                {/* </View> */}
+            </TouchableOpacity>
+        )
+    }
+    const renderAds = (item, index) => {
+        return (
+            <TouchableOpacity onPress={() => particularArtical(item)}>
+                <View style={{ marginRight: scaleHeight(20), marginTop: scaleHeight(10), marginBottom: scaleHeight(50) }}>
+                    <Image style={{ alignSelf: 'center', margin: scaleHeight(20) }} source={Images.Booking_Ads} />
+                </View>
             </TouchableOpacity>
         )
     }
@@ -303,7 +366,6 @@ const UserHome = ({ navigation }) => {
         refRBSheet.current.open()
     }
     const getOnlineLocationData = () => {
-
     }
     const gotoListPage = () => {
         navigation.navigate(Routes.TrendingList)
@@ -311,9 +373,14 @@ const UserHome = ({ navigation }) => {
     const gotoArticalListListPage = () => {
         navigation.navigate(Routes.ArticalList)
     }
-    const callCategoryListPage=()=>{
-        console.log("Hello Category")
+    const callCategoryListPage = () => {
         navigation.navigate(Routes.CategoryList)
+    }
+    const goestoSearchScreen = () => {
+        navigation.navigate('Search')
+    }
+    const gotoFavSaloon = () => {
+        navigation.navigate(Routes.UserFavouriteSaloon)
     }
     return (
         <SafeAreaView>
@@ -323,25 +390,59 @@ const UserHome = ({ navigation }) => {
                     <LocationConatiner loationDetails={currentPlaceName} locationClick={clikOnLocation} />
                 </View>
                 <View>
-                <TouchableOpacity style={style.categoriesConatiner} onPress={()=>callCategoryListPage()}>
-                    <Text style={style.categoryText}>{TextConstant.CATEGORIES}</Text>
-                   
-                        <Text style={style.knowmoreText} onPress={() => openCategory()}>{TextConstant.SHOW_MORE}</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity style={style.categoriesConatiner} onPress={() => callCategoryListPage()}>
+                        <Text style={style.categoryText}>{TextConstant.CATEGORIES}</Text>
+
+                        <Text style={style.knowmoreText}>{TextConstant.SHOW_MORE}</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexWrap: 'wrap', marginHorizontal: scaleWidth(16) }}>
                     <FlatList
-                        data={categoryList}
+                        data={stylesData}
                         renderItem={renderItemCategory}
                         numColumns={calculateColumns()}
                     />
                 </View>
                 <View style={style.searchConatiner}>
-                    <SearchNearSaloon text={TextConstant.SEARCH_NEAR_SALON} />
+                    <SearchNearSaloon isComing="home"
+                        onClick={goestoSearchScreen}
+                        text={TextConstant.SEARCH_NEAR_SALON} />
                 </View>
                 <View style={style.userContainer}>
-                    <UserAdsContainer />
+                    <UserAdsContainer onClick={gotoFavSaloon} />
                 </View>
+                {/* Nearest Salloon for you. */}
+                <View style={{ marginLeft: scaleWidth(20) }}>
+                    <View style={style.tredingContainer}>
+                        <Text style={style.trendingText}>Nearest Salloon for you</Text>
+                        <Text style={style.showMoreText}
+                            onPress={() => goestoSearchScreen()}>{TextConstant.SHOW_MORE} </Text>
+                    </View>
+                    <View style={{ marginTop: scaleHeight(20) }}>
+                        <FlatList
+                            data={saloonsData.slice(0, 5)}
+                            renderItem={renderSaloonItem}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </View>
+                </View>
+                {/* Recommended Saloon for you  */}
+                <View style={{ marginLeft: scaleWidth(20) }}>
+                    <View style={style.tredingContainer}>
+                        <Text style={style.trendingText}>Recommended Saloon for you</Text>
+                        <Text style={style.showMoreText} onPress={() => gotoFavSaloon()}>{TextConstant.SHOW_MORE} </Text>
+                    </View>
+                    <View style={{ marginTop: scaleHeight(20) }}>
+                        <FlatList
+                            data={saloonsData.slice(3, 5)}
+                            renderItem={usersRecomendedSaloon}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </View>
+                </View>
+                {/* Trending style  */}
                 <View style={{ marginLeft: scaleWidth(20) }}>
                     <View style={style.tredingContainer}>
                         <Text style={style.trendingText}>{TextConstant.TRENDING_STYLE}</Text>
@@ -349,30 +450,44 @@ const UserHome = ({ navigation }) => {
                     </View>
                     <View style={{ marginTop: scaleHeight(20) }}>
                         <FlatList
-                            data={crausalData}
+                            data={stylesData}
                             renderItem={renderItem}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                         />
                     </View>
                 </View>
+                {/* Latest Articals  */}
                 <View style={{ marginLeft: scaleWidth(20) }}>
                     <View style={style.tredingContainer}>
                         <Text style={style.trendingText}>Latest article's</Text>
-                        <Text style={style.showMoreText} onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
+                        <Text style={style.showMoreText} 
+                        onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
                     </View>
                     <View style={{ marginTop: scaleHeight(20) }}>
                         <FlatList
-                            data={crausalData}
+                            data={ArticalsData}
                             renderItem={renderArtical}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                         />
                     </View>
                 </View>
-                <View style={{ marginLeft: scaleWidth(20), marginTop: scaleHeight(10) }}>
-                    <Text style={style.adsText}>Ads</Text>
-                    <Image style={{ alignSelf: 'center' }} source={Images.Booking_Ads} />
+                {/* Users Ads  */}
+                <View style={{ marginLeft: scaleWidth(20) }}>
+                    <View style={style.tredingContainer}>
+                        <Text style={style.trendingText}>Latest Ads</Text>
+                        <Text style={style.showMoreText} 
+                        onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
+                    </View>
+                    <View style={{ marginTop: scaleHeight(20) }}>
+                        <FlatList
+                            data={Ads}
+                            renderItem={renderAds}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </View>
                 </View>
             </ScrollView>
             <RBSheet
@@ -390,10 +505,11 @@ const UserHome = ({ navigation }) => {
                     draggableIcon: {
                         backgroundColor: ""
                     },
-
                 }}
             >
-                <LocationBottomSheet navigation={navigation} getOnlineLocationData={getOnlineLocationData} cancelButtonClick={cancelButtonClick} />
+                <LocationBottomSheet navigation={navigation} 
+                getOnlineLocationData={getOnlineLocationData} 
+                cancelButtonClick={cancelButtonClick} />
             </RBSheet>
         </SafeAreaView>
     )

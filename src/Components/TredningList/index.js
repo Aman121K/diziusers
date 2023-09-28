@@ -27,7 +27,7 @@ const style = StyleSheet.create({
 })
 const TrendingLists = ({ onClick, data }) => {
     return (
-        <TouchableOpacity style={style.mainConatiner} onPress={onClick}>
+        <TouchableOpacity style={style.mainConatiner} onPress={()=>onClick(data)}>
             <Image source={Images.CHOTI_DESIGN} />
             <View style={style.titleConatiner}>
                 <Text style={style.titleText}>{data?.item?.title}</Text>

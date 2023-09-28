@@ -66,6 +66,7 @@ import UserSignup from "../Screens/Auth/UserSignup";
 import ArticalList from "../Screens/TrendingArticalsList/ArticalList";
 import CategoryDetails from "../Screens/Categorys/CategoryDetails";
 import CategoryList from "../Screens/Categorys/CategoryList";
+import UserCategorriesList from "../Screens/User/UserCategoriesList";
 const Stack = createNativeStackNavigator();
 const StackNavigation = () => {
     return (
@@ -135,6 +136,7 @@ const StackNavigation = () => {
             <Stack.Screen name={Routes.ArticalList} component={ArticalList} options={{headerShown:false}}/>
             <Stack.Screen name={Routes.CategoryList}component={CategoryList} options={{headerShown:false}}/>
             <Stack.Screen name={Routes.CategoryDetails}component={CategoryDetails} options={{headerShown:false}}/>
+            <Stack.Screen name="UserCategorriesList" component={UserCategorriesList} options={{headerShown:false}}/>
         </Stack.Navigator>
     )
 }

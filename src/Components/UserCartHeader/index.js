@@ -43,9 +43,11 @@ const UserCartHeader = ({ title, addButton, navigation, addSetting, isBackhide }
                 <Text style={style.cartTextStyle}>{title}</Text>
             </View>
             {addButton &&
-                <TouchableOpacity style={style.AddServiceConatiner}>
-                    <Text style={style.addServiceText}>{TextConstant.ADD_SERVICES}</Text>
-                </TouchableOpacity>
+            <>
+            </>
+                // <TouchableOpacity style={style.AddServiceConatiner}>
+                //     <Text style={style.addServiceText}>{TextConstant.ADD_SERVICES}</Text>
+                // </TouchableOpacity>
             }
             {
                 addSetting &&

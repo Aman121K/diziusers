@@ -23,6 +23,11 @@ import InnerTexttInput from "../../../Components/InnerTextInput";
 import DropDownPicker from "react-native-dropdown-picker";
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+} from '@react-native-community/google-signin';
 const styles = StyleSheet.create({
     mainContainer: {
         width: '95%',
@@ -186,7 +191,26 @@ const UserSignup = ({ navigation }) => {
     }
     const loginWithFacebook=()=>{
     }
-    const loginWithGmail=()=>{
+    const loginWithGmail=async()=>{
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            console.log(userInfo);
+          } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+              // User cancelled the sign-in process
+              console.log('User cancelled the sign-in process');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+              // Sign-in process is in progress already
+              console.log('Sign-in process is in progress already');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+              // Play services not available or outdated on the device
+              console.log('Play services not available or outdated on the device');
+            } else {
+              // Some other error happened
+              console.error(error);
+            }
+          }
     }
     return (
         <SafeAreaView>
@@ -230,7 +254,9 @@ const UserSignup = ({ navigation }) => {
                             <Image source={Images.Facebook} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => loginWithGmail()}>
-                            <Image source={Images.Instagram} />
+                        <Image 
+                            style={{height:scaleHeight(35),width:scaleHeight(35),borderRadius:scaleHeight(20)}} 
+                            source={require('../../../Assets/Images/download.jpeg')} />
                         </TouchableOpacity>
                     </View>
                 </View>

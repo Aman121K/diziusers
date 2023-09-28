@@ -59,15 +59,14 @@ const UserProfile = ({ navigation }) => {
         { title: 'App Version', Image: Images.BOTTOM_BOOKING },
         { title: 'Privacy Policy', Image: Images.BOTTOM_BOOKING },
         { title: 'Logout', Image: Images.BOTTOM_BOOKING },
-
     ])
     React.useLayoutEffect(() => {
         getLoginData()
     }, [])
     const getLoginData = async () => {
-        console.log("Call api ")
+        // console.log("Call api ")
         let data = await AsyncStorage.getItem('loginData');
-        console.log("Data>>",data)
+        // console.log("Data>>",data)
         if (data) {
             setLoginValues(JSON.parse(data));
         }

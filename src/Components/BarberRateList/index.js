@@ -3,6 +3,7 @@ import { Text, View, FlatList, TouchableOpacity, StyleSheet, Image } from 'react
 import { normalize, scaleHeight, scaleWidth } from '../../Constant/DynamicSize';
 import { FONTS } from '../../Constant/fonts';
 import { Routes } from '../../Constant/Routes';
+import NoDataFound from '../NoDataFound';
 const style = StyleSheet.create({
     mainConatiner: {
         backgroundColor: 'white',
@@ -79,15 +80,20 @@ const BarberRateList = ({ barberList, navigation, showHeader }) => {
             </TouchableOpacity>
         )
     }
+    const renderEmptyComponent = () => (
+        <NoDataFound text="No Barbers Found for this Saloon"/>
+      );
     return (
         <View>
             {showHeader && <View style={style.headerConatiner}>
                 <Text>Recommended Babers & Services</Text>
-                <Text onPress={() => navigation.navigate(Routes.UserRecommendedBarber)}>View More</Text>
+                {/* <Text onPress={() => navigation.navigate(Routes.UserRecommendedBarber)}>View More</Text> */}
             </View>}
             <FlatList
                 data={barberList}
                 renderItem={renderItem}
+                ListEmptyComponent={renderEmptyComponent}
+                keyExtractor={(item, index) => index.toString()}
             />
         </View>
     )
