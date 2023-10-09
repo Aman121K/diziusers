@@ -5,6 +5,7 @@ import { Images } from "../../../Constant/Images";
 import { TextConstant } from "../../../Constant/TextConstant";
 import { scaleHeight, scaleWidth } from "../../../Constant/DynamicSize";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Routes } from "../../../Constant/Routes";
 const styles = StyleSheet.create({
     mainConatiner: {
     },
@@ -15,7 +16,10 @@ const styles = StyleSheet.create({
     },
     splashText: {
         marginHorizontal: scaleWidth(75),
-        marginTop: scaleHeight(32)
+        marginTop: scaleHeight(32),
+        color: '#868686',
+        alignSelf: 'center',
+        letterSpacing: 0.3
     }
 })
 const Splash = ({ navigation }) => {
@@ -25,26 +29,16 @@ const Splash = ({ navigation }) => {
     }, [])
     const getLoginData = async () => {
         let data = await AsyncStorage.getItem('loginData');
-        if (data) {
-            setLoginData(JSON.parse(data))
-        }
-    }
-    React.useEffect(() => {
+        setLoginData(data)
+        console.log("splash data>>", data)
         const timer = setTimeout(() => {
-            console.log("userData>>",loginData)
-            if (loginData?.role === 2) {
-                navigation.navigate('UserBottomNavigtion')
-            }
-            else if (loginData?.role === 1) {
+            if (data) {
                 navigation.navigate('UserBottomNavigtion')
             } else {
-                navigation.navigate('UserBottomNavigtion')
+                navigation.navigate(Routes.Welcome)
             }
-
-        }, 3000);
-        return () => clearTimeout(timer);
-    }, [])
-
+        }, 3000);  
+    }
     return (
         <SafeAreaView>
             <StatusBar backgroundColor='#E7EEFA' barStyle="light-content" />

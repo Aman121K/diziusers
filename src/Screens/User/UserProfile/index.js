@@ -28,8 +28,9 @@ const style = StyleSheet.create({
     },
     titleStyle: {
         marginLeft: scaleWidth(10),
-        fontSize: normalize(13),
-        fontFamily: FONTS.MontserratRegular
+        fontSize: normalize(14),
+        fontFamily: FONTS.MontserratRegular,
+        color: '#000'
     },
     loginButton: {
         backgroundColor: '#022A6D',
@@ -60,11 +61,11 @@ const UserProfile = ({ navigation }) => {
         { title: 'Privacy Policy', Image: Images.BOTTOM_BOOKING },
         { title: 'Logout', Image: Images.BOTTOM_BOOKING },
     ])
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         getLoginData()
     }, [])
     const getLoginData = async () => {
-        // console.log("Call api ")
+        console.log("Call api ")
         let data = await AsyncStorage.getItem('loginData');
         // console.log("Data>>",data)
         if (data) {

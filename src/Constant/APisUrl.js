@@ -13,7 +13,8 @@ export const Apis = {
     GET_STYLES:'get-styles',
     get_ADS:'get-ads',
     GET_ALL_SALOONS:'get-all-salons',
-    GET_BARBER_LIST:'barber/getSalonBarbers/'
+    GET_BARBER_LIST:'barber/getSalonBarbers/',
+    GET_CATEGORIES_LIST:'get-categories'
 
 }
-export const BASE_URL = `http://43.204.144.93:5001/api/v1/`
+export const BASE_URL = `http://api.dizisalon.in/api/v1/`

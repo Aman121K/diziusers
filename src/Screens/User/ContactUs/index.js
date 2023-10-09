@@ -27,6 +27,9 @@ const ContactUs = ({ navigation }) => {
     const closeModal = () => {
         setModalVisible(false)
     }
+    const onSubmitClick=()=>{
+        setModalVisible(false)
+    }
     return (
         <SafeAreaView>
             <ScrollView>
@@ -40,7 +43,7 @@ const ContactUs = ({ navigation }) => {
                     <ButtonBlue buttonText={TextConstant.Submit} onClick={onclick} />
                 </View>
             </ScrollView>
-            <ModalConatiner title={TextConstant.MESSAGESUCCESSFULLY} modalVisible={modalVisible} closeModal={closeModal} />
+            <ModalConatiner title={TextConstant.MESSAGESUCCESSFULLY} onSubmitClick={onSubmitClick} modalVisible={modalVisible} closeModal={closeModal} />
         </SafeAreaView>
     )
 }

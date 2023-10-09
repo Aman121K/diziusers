@@ -7,6 +7,8 @@ import { normalize, scaleHeight, scaleWidth } from "../../../Constant/DynamicSiz
 import { Images } from "../../../Constant/Images";
 import { FONTS } from "../../../Constant/fonts";
 import { Routes } from "../../../Constant/Routes";
+import SaloonContainers from "../../../Components/SaloonContainers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const style = StyleSheet.create({
     mainConatiner: {
         flex: 1
@@ -85,45 +87,27 @@ const UserFavouriteSaloon = ({ navigation }) => {
         { title: 'Hair Cutting', Image: Images.SALLON_BG_IMAGE },
         { title: 'Hair Cutting', Image: Images.SALLON_BG_IMAGE },
     ])
-    const goToNextPage = () => {
-        navigation.navigate(Routes.UserSaloonDetails)
+    React.useLayoutEffect(async () => {
+        const data = await AsyncStorage.getItem('recomendedsaloon');
+        if (data) {
+            setSallonListData(JSON.parse(data))
+        }
+    }, [])
+    React.useEffect(()=>{
+
+    },[])
+
+    const gotoSaloonDetailsPage = (item) => {
+        navigation.navigate(Routes.UserSaloonDetails, { data: item?.item })
     }
     const renderData = (item) => {
         return (
-            <TouchableOpacity onPress={() => goToNextPage()} style={style.dataContainer}>
-                <Image source={item?.item?.Image} style={style.dataImage} />
-                <TouchableOpacity style={style.unlikeButon}>
-                    <Image source={Images.UNLIKE} />
-                </TouchableOpacity>
-                <View style={style.textConatiner}>
-                    <View style={style.startContainer}>
-                        <Image source={Images.STAR} />
-                        <Text style={style.reviewtext}>3.5</Text>
-                        <Text>(12)</Text>
-                    </View>
-                    <View>
-                        <Text style={style.genderText}>Male</Text>
-                    </View>
-                </View>
-                <View style={style.sallonContainer}>
-                    <View>
-                        <Text style={style.saloonText}>Saloon Name</Text>
-                    </View>
-                    <View>
-                        <Text style={style.genderText}>{(item.item.title)}</Text>
-                    </View>
-                </View>
-                <View style={style.locationContainer}>
-                    <Image source={Images.LOCATION} />
-                    <Text style={style.locationText}>10Km. Near Jagatpura Phatak</Text>
-                </View>
-                {/* <Text>{item?.item?.title}</Text> */}
-            </TouchableOpacity>
+            <SaloonContainers onClick={gotoSaloonDetailsPage} item={item} />
         )
     }
     return (
         <SafeAreaView style={style.mainConatiner}>
-            <UserCartHeader navigation={navigation} isBackhide={true} title={TextConstant.SEARCH_FOR_SERVICE} />
+            <UserCartHeader navigation={navigation} isBackhide={false} title={TextConstant.SEARCH_FOR_SERVICE} />
             <View style={style.searchConatiner}>
                 <SearchNearSaloon text={TextConstant.SEARCH__HAIR_CUTTING_SALON} />
             </View>

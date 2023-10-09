@@ -64,20 +64,21 @@ const style = StyleSheet.create({
     },
     genderText: {
         fontSize: normalize(10),
-        // fontFamily:FONTS.MontserratRegular,
+        fontFamily: FONTS.MontserratRegular,
         color: "#7A7A7A"
     },
     saloonText: {
-        // fontFamily:FONTS.MontserratRegular,
+        fontFamily: FONTS.MontserratRegular,
         color: 'black',
         fontSize: normalize(10)
     },
     locationText: {
         fontSize: normalize(9),
-        color: '#6C6C6C'
+        color: '#6C6C6C',
     }
 })
 const SaloonContainers = ({ item, onClick }) => {
+    console.log("salon item>>>", item)
     return (
         <TouchableOpacity onPress={() => onClick(item)} style={style.dataContainer}>
             <Image source={Images.SALLON_BG_IMAGE} style={style.dataImage} />
@@ -88,23 +89,26 @@ const SaloonContainers = ({ item, onClick }) => {
                 <View style={style.startContainer}>
                     <Image source={Images.STAR} />
                     <Text style={style.reviewtext}>3.5</Text>
-                    <Text>(12)</Text>
+                    <Text style={{ fontSize: normalize(10), marginLeft: scaleHeight(4), color: '#7A7A7A' }}>(12)</Text>
                 </View>
                 <View>
                     <Text style={style.genderText}>Male</Text>
                 </View>
             </View>
-            <View style={style.sallonContainer}>
-                <View>
-                    <Text style={style.saloonText}>{item?.item?.salonName}</Text>
-                </View>
-                <View>
-                    <Text style={style.genderText}>{(item?.item?.title)}</Text>
-                </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: scaleWidth(10) }}>
+                <Text style={style.saloonText}>{item?.item?.salonName}</Text>
+                <Text style={style.saloonText}>(Hair's cutting)</Text>
+            </View>
+            <View>
+                <Text style={style.genderText}>{(item?.item?.title)}</Text>
             </View>
             <View style={style.locationContainer}>
                 <Image source={Images.LOCATION} />
                 <Text style={style.locationText}>10Km. Near Jagatpura Phatak</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: scaleWidth(15), marginTop: scaleHeight(5) }}>
+                <Text style={style.saloonText}>Available slots:</Text>
+                <Text style={style.locationText}>10.00 PM</Text>
             </View>
         </TouchableOpacity>
     )

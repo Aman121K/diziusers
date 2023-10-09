@@ -22,3 +22,12 @@ export const getLocationName= async(lat,long)=>{
         return null;
       }
 }
+export const truncatedString=(longString)=>{
+  const truncatedString = longString.length >10 ? longString.slice(0, 10) + '...' : longString;
+  return truncatedString
+}
+
+export const longTruncatedString=(longString)=>{
+  const truncatedString = longString.length >100 ? longString.slice(0, 100) + '...' : longString;
+  return truncatedString
+}

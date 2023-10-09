@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontSize: normalize(16),
-
     fontFamily: FONTS.MontserratSemiBold
   },
   btnStyle: {

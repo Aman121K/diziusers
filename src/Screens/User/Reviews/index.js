@@ -2,7 +2,8 @@ import React from 'react';
 import { SafeAreaView, View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import UserCartHeader from '../../../Components/UserCartHeader';
 import { Images } from '../../../Constant/Images';
-import { scaleHeight, scaleWidth } from '../../../Constant/DynamicSize';
+import { normalize, scaleHeight, scaleWidth } from '../../../Constant/DynamicSize';
+import { FONTS } from '../../../Constant/fonts';
 const style = StyleSheet.create({
     mainConatiner: {
         // height:'100%'
@@ -26,6 +27,21 @@ const style = StyleSheet.create({
     },
     starConatiner: {
         flexDirection: 'row'
+    },
+    descriptionstyle:{
+        color:'#818181',
+        fontSize:normalize(14),
+        fontFamily:FONTS.MontserratRegular,
+        textAlign:'justify'
+
+    },
+    customerName:{
+        fontSize:normalize(12),
+        fontFamily:FONTS.MontserratBold,
+        color:'black'
+    },
+    saloonName:{
+
     }
 })
 const Reviews = ({ navigation }) => {
@@ -93,8 +109,8 @@ const Reviews = ({ navigation }) => {
             <TouchableOpacity style={style.cardConatiner}>
                 <View style={style.cardConatiner}>
                     <Image style={style.imageStyle} source={item?.CustomerUrl} />
-                    <Text>{item?.customerName}</Text>
-                    <Text>{item?.saloonName}</Text>
+                    <Text style={style.customerName}>{item?.customerName}</Text>
+                    <Text style={style.customerName}>{item?.saloonName}</Text>
                 </View>
                 <View style={style.starConatiner}>
                     <Image source={Images.STAR} />
@@ -103,7 +119,7 @@ const Reviews = ({ navigation }) => {
                     <Image source={Images.STAR} />
                     <Image source={Images.STAR} />
                 </View>
-                <Text>{item?.description}</Text>
+                <Text style={style.descriptionstyle}>{item?.description}</Text>
                 <Text>{item?.serviceDate}</Text>
             </TouchableOpacity>
         )

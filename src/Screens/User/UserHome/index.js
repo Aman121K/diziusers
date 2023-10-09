@@ -12,12 +12,14 @@ import LocationBottomSheet from "../../../Components/LocationBottomSheet";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Geolocation from '@react-native-community/geolocation';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
-import { getLocationName } from "../../../Utils";
+import { getLocationName, truncatedString } from "../../../Utils";
 import { Routes } from "../../../Constant/Routes";
 import SaloonContainers from "../../../Components/SaloonContainers";
 import UserFavouriteSaloon from "../UserFavouriteSaloon";
 import { Apis, BASE_URL } from "../../../Constant/APisUrl";
 import { getStyle } from "react-native-svg/lib/typescript/xml";
+import CustomImage from "../../../Components/CustomImage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width } = Dimensions.get('window');
 const itemWidth = 50;
 const style = StyleSheet.create({
@@ -34,9 +36,10 @@ const style = StyleSheet.create({
         alignItems: 'center'
     },
     categoryText: {
-        fontSize: normalize(16),
+        fontSize: normalize(15),
         fontFamily: FONTS.MontserratSemiBold,
-        color: 'black'
+        color: 'black',
+        letterSpacing: 0.3
     },
     knowmoreText: {
         fontFamily: FONTS.MontserratRegular,
@@ -52,7 +55,7 @@ const style = StyleSheet.create({
         fontWeight: '500',
         lineHeight: scaleHeight(15),
         color: "black",
-        margin:scaleHeight(2)
+        margin: scaleHeight(2)
     },
     searchConatiner: {
         marginTop: scaleHeight(20)
@@ -70,8 +73,8 @@ const style = StyleSheet.create({
         marginTop: scaleHeight(8)
     },
     imageStyle: {
-        height: 100,
-        width: 100
+        height: scaleHeight(100),
+        width: scaleWidth(100)
     },
     adsText: {
         fontSize: normalize(16),
@@ -88,21 +91,19 @@ const style = StyleSheet.create({
         marginTop: scaleHeight(24)
     },
     articalDesign: {
-        // borderWidth: 1,
-        // borderColor: 'white',
         padding: scaleHeight(5),
         alignItems: 'center',
         margin: scaleHeight(10),
-        // backgroundColor: 'white',
         borderRadius: scaleHeight(5)
-        // alignSelf: 'center'
-    }
+    },
+    customImageStyle: { width: scaleWidth(58), height: scaleHeight(60), borderRadius: 99 }
 })
 const UserHome = ({ navigation }) => {
     const [saloonsData, setSaloonDatas] = React.useState([])
     const [Ads, setAds] = React.useState([])
     const [stylesData, setStylesData] = React.useState([]);
     const [ArticalsData, setArticalsData] = React.useState([])
+    const [categoriesData, setCategoriesData] = React.useState([]);
     const refRBSheet = React.useRef();
     const [location, setLocation] = React.useState(null);
     const [currentPlaceName, setCurrentPlaceName] = React.useState();
@@ -119,7 +120,7 @@ const UserHome = ({ navigation }) => {
         setLocationStatus
     ] = useState('');
     useEffect(() => {
-        // getCatogoriesApi()
+        getCatogoriesApi()
         getSaloonAPis();
         getsAdsApi();
         getArticals();
@@ -155,6 +156,17 @@ const UserHome = ({ navigation }) => {
         };
 
     }, []);
+    const getCatogoriesApi = async () => {
+        const response = await fetch(BASE_URL + Apis.GET_CATEGORIES_LIST, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Categories details>", data)
+        setCategoriesData(data?.data)
+    }
     const getSaloonAPis = async () => {
         const response = await fetch(BASE_URL + Apis.GET_ALL_SALOONS, {
             method: 'GET',
@@ -164,8 +176,9 @@ const UserHome = ({ navigation }) => {
         });
         const data = await response.json();
         console.log("Saloon details>", data)
+
         setSaloonDatas(data?.data)
-        // setSallonListData(data?.data)
+        await AsyncStorage.setItem('recomendedsaloon', JSON.stringify(data?.data))
     }
     const getsAdsApi = async () => {
         const response = await fetch(BASE_URL + Apis.get_ADS, {
@@ -175,7 +188,6 @@ const UserHome = ({ navigation }) => {
             },
         });
         const data = await response.json();
-        console.log("Ads details>", data)
         setAds(data?.data)
     }
     const getArticals = async () => {
@@ -186,7 +198,6 @@ const UserHome = ({ navigation }) => {
             },
         });
         const data = await response.json();
-        console.log("Articals details>", data)
         setArticalsData(data?.data)
     }
     const getStyles = async () => {
@@ -197,7 +208,6 @@ const UserHome = ({ navigation }) => {
             },
         });
         const data = await response.json();
-        console.log("Styles details>", data)
         setStylesData(data?.data)
     }
     const getOneTimeLocation = () => {
@@ -310,7 +320,7 @@ const UserHome = ({ navigation }) => {
         return (
             <TouchableOpacity style={style.articalDesign} onPress={() => particularStyle(item)}>
                 <Image source={Images.HAIRCUTTINGS} />
-                <Text style={style.title}>{item?.item?.title}</Text>
+                <Text style={style.title}>{truncatedString(item?.item?.title)}</Text>
             </TouchableOpacity>
         )
     }
@@ -330,8 +340,10 @@ const UserHome = ({ navigation }) => {
     const renderItemCategory = (item, index) => {
         return (
             <TouchableOpacity style={style.articalDesign} onPress={() => particularStyle(item)}>
-                <Image source={Images.HAIRCUTTINGS} />
-                <Text style={style.title}>{item?.item?.title}</Text>
+                <CustomImage />
+                <CustomImage source={item?.item?.coverImage} staticSource={Images.HAIRCUTTINGS}
+                    style={style.customImageStyle} />
+                <Text style={style.title}>{truncatedString(item?.item?.title)}</Text>
             </TouchableOpacity>
         )
     }
@@ -356,7 +368,7 @@ const UserHome = ({ navigation }) => {
         )
     }
     React.useLayoutEffect(() => {
-        refRBSheet.current.open()
+        // refRBSheet.current.open()
     }, [])
     const calculateColumns = () => Math.floor(width / itemWidth);
     const cancelButtonClick = () => {
@@ -398,7 +410,7 @@ const UserHome = ({ navigation }) => {
                 </View>
                 <View style={{ flexWrap: 'wrap', marginHorizontal: scaleWidth(16) }}>
                     <FlatList
-                        data={stylesData}
+                        data={categoriesData}
                         renderItem={renderItemCategory}
                         numColumns={calculateColumns()}
                     />
@@ -461,8 +473,8 @@ const UserHome = ({ navigation }) => {
                 <View style={{ marginLeft: scaleWidth(20) }}>
                     <View style={style.tredingContainer}>
                         <Text style={style.trendingText}>Latest article's</Text>
-                        <Text style={style.showMoreText} 
-                        onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
+                        <Text style={style.showMoreText}
+                            onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
                     </View>
                     <View style={{ marginTop: scaleHeight(20) }}>
                         <FlatList
@@ -477,8 +489,8 @@ const UserHome = ({ navigation }) => {
                 <View style={{ marginLeft: scaleWidth(20) }}>
                     <View style={style.tredingContainer}>
                         <Text style={style.trendingText}>Latest Ads</Text>
-                        <Text style={style.showMoreText} 
-                        onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
+                        <Text style={style.showMoreText}
+                            onPress={() => gotoArticalListListPage()}>{TextConstant.SHOW_MORE} </Text>
                     </View>
                     <View style={{ marginTop: scaleHeight(20) }}>
                         <FlatList
@@ -507,9 +519,9 @@ const UserHome = ({ navigation }) => {
                     },
                 }}
             >
-                <LocationBottomSheet navigation={navigation} 
-                getOnlineLocationData={getOnlineLocationData} 
-                cancelButtonClick={cancelButtonClick} />
+                <LocationBottomSheet navigation={navigation}
+                    getOnlineLocationData={getOnlineLocationData}
+                    cancelButtonClick={cancelButtonClick} />
             </RBSheet>
         </SafeAreaView>
     )

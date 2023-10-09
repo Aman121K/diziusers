@@ -83,7 +83,7 @@ const Signin = ({ navigation, route }) => {
         // }
     }
     const goToforgotScreen = () => {
-        navigation.navigate(Routes.CreatePin)
+        navigation.navigate(Routes.ForgotMpin)
     }
     const onChnageText = (name, e) => {
         console.log("vika", name, e)

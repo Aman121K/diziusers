@@ -5,7 +5,8 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import { Images } from "../../../Constant/Images";
 import AuthHeader from "../../../Components/AuthHeader";
 import { Routes } from "../../../Constant/Routes";
-import { scaleHeight, scaleWidth } from "../../../Constant/DynamicSize";
+import { normalize, scaleHeight, scaleWidth } from "../../../Constant/DynamicSize";
+import { FONTS } from "../../../Constant/fonts";
 
 const slides = [
     {
@@ -48,7 +49,7 @@ export default class App extends React.Component {
                     style={{
                         paddingTop: 25,
                         paddingBottom: 10,
-                        fontSize: 23,
+                        fontSize:normalize(15),
                         fontWeight: "bold",
                         color: "#21465b",
                         alignSelf: "center",
@@ -59,9 +60,11 @@ export default class App extends React.Component {
 
                 <Text style={{
                     textAlign: "center",
-                    color: "#b5b5b5",
-                    fontSize: 15,
-                    paddingHorizontal: 30
+                    color: "#868686",
+                    fontSize: normalize(12),
+                    paddingHorizontal: 30,
+                    fontFamily:FONTS.MontserratRegular
+
                 }}>
                     {item.text}
                 </Text>
@@ -69,7 +72,7 @@ export default class App extends React.Component {
         );
     };
     onDone = () => {
-        this.props.navigation.navigate(Routes.ChooseType)
+        this.props.navigation.navigate('UserBottomNavigtion')
     }
     render() {
         return (
@@ -85,7 +88,7 @@ export default class App extends React.Component {
                     data={slides}
                     activeDotStyle={{
                         backgroundColor: "#21465b",
-                        // width: 30
+                        width: 30
                     }}
                     onDone={this.onDone}
                 />

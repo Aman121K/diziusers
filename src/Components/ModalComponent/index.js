@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
     mainTextStyle: {
         fontFamily: FONTS.MontserratSemiBold,
         fontSize: normalize(20),
-        alignSelf: 'center'
+        alignSelf: 'center',
+        color:'black'
     },
     crossIcon: {
         alignSelf: 'flex-end'
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
     },
     CancelStyle: {
         fontSize: normalize(12),
-        fontFamily: FONTS.MontserratMedium
+        fontFamily: FONTS.MontserratMedium,
+        // color:''
     },
     SubTitleStyle: {
         fontSize: normalize(12),
@@ -84,7 +86,7 @@ const ModalConatiner = ({ modalVisible, closeModal, title, subTitle, buttonText,
                         <Text style={styles.mainTextStyle}>{title}</Text>
                         <Text style={styles.SubTitleStyle}>{subTitle}</Text>
                         <TouchableOpacity style={styles.buttonConatiner} onPress={onSubmitClick}>
-                            <Text style={styles.continueStyle}>{buttonText}</Text>
+                            <Text style={styles.continueStyle}>Submit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.CancelConatiner} onPress={onCancelClick}>
                             <Text style={styles.CancelStyle}>Cancel</Text>

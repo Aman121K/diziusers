@@ -7,7 +7,7 @@ import { FONTS } from "../../../Constant/fonts";
 import { TextConstant } from "../../../Constant/TextConstant";
 import InputBoxComponent from "../../../Components/InputBoxComponent";
 import ButtonBlue from "../../../Components/Button_Blue";
-import OTPInputView from "@twotalltotems/react-native-otp-input";
+// import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { Routes } from "../../../Constant/Routes";
 const style = StyleSheet.create({
     scrollConatiner: {
@@ -82,7 +82,10 @@ const ForgotMpin = ({ navigation }) => {
                 <Image source={Images.ForgotMpin_bg} style={style.bgImage} />
                 <Text style={style.bgText}>Please Enter Your Phone Number or Email Address To Receive a Verification Code.</Text>
                 <View style={style.phoneConatiner}>
-                    <InputBoxComponent label={TextConstant.Phone_number} size={248} placeholder={TextConstant.Phone_number} />
+                    <InputBoxComponent label="Enter Number/Email Address" 
+                    size={248} 
+                    placeholder="Enter Number/Email" 
+                    />
                     <TouchableOpacity style={style.sendConatiner}>
                         <Text style={style.sendText}>Send</Text>
                     </TouchableOpacity>
@@ -90,17 +93,26 @@ const ForgotMpin = ({ navigation }) => {
                 </View>
                 <View style={style.OTPConatiner}>
                     <Text style={style.OTPText}>{TextConstant.OTP_NUMBER}</Text>
-                    <OTPInputView
+                    {/* <OTPInputView
                         style={{ width: '70%', height: 100 }}
                         pinCount={4}
                         autoFocusOnLoad
                         codeInputFieldStyle={style.underlineStyleBase}
-                        codeInputHighlightStyle={style.underlineStyleHighLighted}
+                        // codeInputHighlightStyle={style.underlineStyleHighLighted}
                         onCodeFilled={(code => {
                             console.log(`Code is ${code}, you are good to go!`)
                         })}
-                    />
-                    <Text style={[style.OTPText, { alignSelf: 'flex-end', marginRight: scaleWidth(30), marginVertical: scaleHeight(10) }]} onPress={() => callResendOtp()}>Send</Text>
+                    /> */}
+                    <Text style={[style.OTPText,
+                    { alignSelf: 'center', 
+                    marginRight: scaleWidth(30), 
+                    marginVertical: scaleHeight(10),
+                    color:'#022A6D'
+
+                 }]}
+                        onPress={() => callResendOtp()}>
+                        Resend
+                    </Text>
                 </View>
                 <View style={style.submitConatuner}>
                     <ButtonBlue onClick={onClick} buttonText={TextConstant.Submit} />

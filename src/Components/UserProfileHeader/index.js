@@ -55,11 +55,12 @@ const style = StyleSheet.create({
     }
 })
 const UserProfileHeader = ({onEditButtonClick,data}) => {
+    console.log("data name>>",data)
     return (
         <View style={style.mainConatiner}>
             <View style={style.subMainContainer}>
                 <View style={style.backButtonConatiner}>
-                    <Image source={Images.BackBuuton} />
+                    {/* <Image source={Images.BackBuuton} /> */}
                     <Text style={style.profileText}>Profile</Text>
                 </View>
                 <TouchableOpacity onPress={onEditButtonClick} style={style.editConatiner}>

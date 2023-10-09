@@ -27,7 +27,7 @@ const style = StyleSheet.create({
         fontFamily: FONTS.MontserratRegular,
         lineHeight: scaleHeight(14.63),
         color: '#858585',
-        width: '100%',
+        width: '95%',
         marginLeft:scaleWidth(10)
     }
 })

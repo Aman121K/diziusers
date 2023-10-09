@@ -50,7 +50,8 @@ const style = StyleSheet.create({
     },
     customerName: {
         fontSize: normalize(14),
-        fontFamily: FONTS.MontserratSemiBold
+        fontFamily: FONTS.MontserratSemiBold,
+        color:'black'
     },
     customerMobile: {
         fontFamily: FONTS.MontserratRegular,

@@ -70,7 +70,8 @@ const style = StyleSheet.create({
     titleStyle: {
         fontSize: normalize(18),
         fontFamily: FONTS.MontserratMedium,
-        lineHeight: scaleHeight(20)
+        lineHeight: scaleHeight(20),
+        color: '#0B0B0B'
     },
     valueStyle: {
         fontSize: normalize(14),
@@ -107,7 +108,8 @@ const style = StyleSheet.create({
         fontSize: normalize(16),
         fontFamily: FONTS.MontserratMedium,
         lineHeight: scaleHeight(20),
-        marginLeft: scaleWidth(10)
+        marginLeft: scaleWidth(10),
+        color: '#0B0B0B'
     }
 })
 const data = [
